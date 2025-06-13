@@ -1,0 +1,155 @@
+## 🧠 Project Prompt: Modular Multi-Agent System for PDF Intelligence Using Azure OpenAI (Configurable for Ollama & Gemini)
+
+### ✅ Objective
+
+Design and build a **highly modular, pluggable multi-agent system in Python**, using `pydantic_ai`, that performs a suite of document intelligence tasks on PDFs. The system should:
+
+* Use **Azure OpenAI** (via its API endpoint and key) as the **default LLM backend**.
+* Be **easily configurable** to support **Ollama** (local LLMs) and **Gemini** (Google’s API) with minimal code changes.
+* Be built in a **clean, extensible, and production-friendly manner**, and remain **simple to integrate with an existing FastAPI backend** (no need to define a new FastAPI app).
+* Be focused on **agentic orchestration**, **PDF content understanding**, **vector retrieval**, and **structured task automation**.
+
+---
+
+### ⚙️ System Capabilities
+
+#### 🧩 Core Features (Agentic Workflows)
+
+##### 1. **PDF Extraction & Chunking**
+
+* Extract content from PDFs **without OCR**.
+* Group extracted data **section-wise**, preserving:
+
+  * Section headings
+  * Paragraphs
+  * Structured tables
+* Perform **semantic chunking** of the data suitable for embedding.
+
+##### 2. **Embedding & Storage**
+
+* Embed chunks using Azure OpenAI embedding endpoint (or compatible LLM).
+* Store embeddings in **local Qdrant** instance.
+* Ensure that this Qdrant store is accessible by agents for retrieval-augmented tasks.
+
+---
+
+#### 🤖 Agentic Systems
+
+Each system is built as a reusable, modular agent using `pydantic_ai`.
+
+---
+
+##### 🔹 Summarization Agents
+
+* **Document Summary Agent** – Summarizes the entire PDF.
+* **Section Summary Agent** – Accepts a section or heading and summarizes its content.
+* **Page-based Summary Agent** – Summarizes content based on a page number or range.
+
+---
+
+##### 🔹 Translation Agent
+
+* Translates the entire PDF content into a **user-selected language**, maintaining:
+
+  * **Structure** (headings, paragraphs, tables)
+  * **Contextual integrity**
+* Performs **in-place translation** and reconstructs a downloadable PDF that mimics the original structure in the new language.
+
+---
+
+##### 🔹 Comparison + QA Chatbot Agent
+
+* Compares **two uploaded PDFs**.
+* Supports QA-style interaction:
+
+  * User asks a question.
+  * System responds by:
+
+    * Searching both documents
+    * Providing the answer
+    * Stating **which PDF**, **section/page** the answer is from
+    * Including **references** and evidence
+
+---
+
+##### 🔹 Evaluation Agent
+
+* Generates **N questions** from a PDF based on user input.
+* Runs an interactive Q\&A session with the user.
+* Evaluates the answers and generates a **detailed assessment report**:
+
+  * Accuracy
+  * Understanding
+  * Areas to improve
+
+---
+
+### 🧩 Architecture & Design Considerations
+
+* Structure should be **modular and flexible**, not necessarily tied to a rigid folder layout.
+* Emphasis on:
+
+  * Reusable components (chunkers, LLM providers, vector search interfaces)
+  * Agent abstraction using `pydantic_ai`
+  * Clean separation of concerns (parsing, retrieval, orchestration, execution)
+* Each agent should be **self-contained**, testable, and configurable.
+
+---
+
+### 🔌 Integration
+
+* Do **not create a standalone FastAPI app**.
+* Instead, expose agent capabilities as **modular classes or services** that can be:
+
+  * Instantiated in any existing FastAPI app
+  * Used in routes or background tasks
+* Include an **integration interface** or adapter to simplify importing and wiring into any backend.
+
+---
+
+### 🔁 LLM Provider Support
+
+* Use **Azure OpenAI API** by default with:
+
+  * Endpoint
+  * Deployment name
+  * API version
+  * API key
+* Include an **abstract interface or config-driven provider** system to:
+
+  * Swap between Azure, Ollama, and Gemini
+  * Maintain consistent inputs/outputs across providers
+  * Avoid modifying agent logic when switching providers
+
+---
+
+### 📄 Documentation & Developer Experience
+
+* Provide detailed documentation using **MkDocs**.
+
+  * Setup instructions
+  * Configuration for each LLM provider
+  * How to register and run agents
+  * Integration guide for FastAPI
+  * JSON structure examples for PDF extraction
+  * Reconstructed translated PDF samples
+* Include scripts or CLI utilities (where helpful) for:
+
+  * Running extraction
+  * Indexing chunks to Qdrant
+  * Testing individual agents
+
+---
+
+### ✅ Deliverables
+
+* Modular, clean Python codebase implementing all agents and core utilities.
+* PDF extraction utility with section-wise structured output in JSON.
+* Support for storing and querying embeddings from local Qdrant DB.
+* Config-driven LLM provider system with Azure OpenAI as default.
+* Reconstructed translated PDFs preserving structure.
+* Working agent-based implementations for summarization, translation, comparison, QA, and evaluation.
+* Documentation ready for MkDocs deployment.
+* Easy-to-import services and agents to plug into any FastAPI project.
+
+

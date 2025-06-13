@@ -1,0 +1,12 @@
+pydantic-ai
+openai
+qdrant-client
+fastapi
+python-multipart
+pypdf
+
+
+
+google-generativeai
+
+
